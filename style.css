@@ -1,0 +1,17 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0px;
+    padding: 0px;
+    
+}
+
+.main-container {
+    background-image: url('../imgs/alamance.jpeg');
+    width: 100vw;
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+}
