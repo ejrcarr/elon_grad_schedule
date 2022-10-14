@@ -5,13 +5,64 @@
 body {
     margin: 0px;
     padding: 0px;
-    
 }
 
 .main-container {
+    display: flex;
     background-image: url('../imgs/alamance.jpeg');
     width: 100vw;
     height: 100vh;
     background-size: cover;
     background-position: center;
+}
+
+.top-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #73000a;
+    padding: clamp(1px, 1vh, 15px) 10px;
+}
+
+.top-nav .elon-logo-horizontal {
+    width: clamp(125px, 15vw, 200px);
+}
+
+.top-nav-content {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 5px;
+    padding-right: 15px;
+    font-size: clamp(20px, 2vw, 50px);
+    color: white;
+}
+
+.top-nav-content i {
+    cursor: pointer;
+}
+
+.top-nav-content i:hover {
+    color: rgb(200, 200, 200);
+}
+
+.content-container {
+    height: 100%;
+}
+
+.side-bar-container {
+    background-color: rgba(211, 197, 157, .5);
+    height: 100%;
+    width: clamp(100px, 20%, 300px);
+    backdrop-filter: blur(4px);
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    /* height: 100%; */
+}
+
+.footer {
+
 }
