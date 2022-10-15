@@ -5,10 +5,12 @@
 body {
     margin: 0px;
     padding: 0px;
+    font-family: Verdana,Helvetica,sans-serif;
 }
 
 .main-container {
     display: flex;
+    justify-content: center;
     background-image: url('../imgs/alamance.jpeg');
     width: 100vw;
     height: 100vh;
@@ -25,7 +27,12 @@ body {
 }
 
 .top-nav .elon-logo-horizontal {
+    display: block;
     width: clamp(125px, 15vw, 200px);
+}
+
+.top-nav .elon-logo-max-width {
+    display: none;
 }
 
 .top-nav-content {
@@ -46,8 +53,25 @@ body {
     color: rgb(200, 200, 200);
 }
 
+
 .content-container {
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
     height: 100%;
+    padding-top: 100px;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.content-title {
+    background: rgba(255, 255, 255, .25);
+    color: rgb(25, 25, 25);
+    text-align: center;
+    backdrop-filter: blur(2px);
+    border-radius: 10px;
+    padding: 10px;
+    border: 1px solid white;
 }
 
 .side-bar-container {
@@ -57,12 +81,35 @@ body {
     backdrop-filter: blur(4px);
 }
 
-.content {
-    display: flex;
-    flex-direction: column;
-    /* height: 100%; */
+.bottom-nav {
+    display: none;
 }
 
-.footer {
 
+
+
+@media screen and (max-width: 800px) {
+    .side-bar-container {
+        display: none;
+    }
+
+}
+
+@media screen and (min-width: 800px) {
+    .top-nav .elon-logo-horizontal {
+        display: none;
+        width: clamp(125px, 15vw, 200px);
+    }
+    
+    .top-nav .elon-logo-max-width {
+        display: block;
+        width: clamp(300px, 15vw, 450px);
+    }
+
+    .bottom-nav {
+        content: "";
+        display: block;
+        background:rgb(104, 0, 0);
+        height: 15px;
+    }
 }
