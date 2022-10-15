@@ -1,3 +1,11 @@
+:root {
+    --elon-red: #73000a;
+    --elon-gold: rgb(211, 197, 157);
+    --elon-red-darker: #69000a;
+    --elon-red-darkest: #61000a;
+    --elon-gold-darker: rgb(161, 147, 107)
+}
+
 *, *::before, *::after {
     box-sizing: border-box;
 }
@@ -22,12 +30,15 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #73000a;
+    background-color: var(--elon-red);
     padding: clamp(1px, 1vh, 15px) 10px;
 }
 
 .top-nav .elon-logo-horizontal {
     display: block;
+}
+
+.elon-logo-horizontal img {
     width: clamp(125px, 15vw, 200px);
 }
 
@@ -41,18 +52,49 @@ body {
     justify-content: flex-end;
     padding: 5px;
     padding-right: 15px;
-    font-size: clamp(20px, 2vw, 50px);
-    color: white;
 }
 
-.top-nav-content i {
+#search-button {
+    position: relative;
+    left: -5px;
+    font-size: clamp(20px, 2vw, 23px);
+    color: white;
+    background: none;
+    border: none;
     cursor: pointer;
+}
+
+form {
+    display: flex;
+    align-items: center;
 }
 
 .top-nav-content i:hover {
     color: rgb(200, 200, 200);
 }
 
+.search {
+    display: flex;
+    align-items: center;
+}
+
+.search input {
+    position: relative;
+    left: 30px;
+    background: var(--elon-red-darker);
+    height: 25px;
+    width: 150px;
+    padding: clamp(5px, 2vw, 15px);
+    width: clamp(145px, 20vw, 500px);
+    border-radius: 15px;
+    border: none;
+    box-shadow: 0 0 0 1px var(--elon-red-darkest);
+    color: rgb(208, 208, 208);
+}
+
+.search input:active, .search input:focus {
+    box-shadow: 0 0 0 1px white;
+}
 
 .content-container {
     display: flex;
@@ -60,18 +102,6 @@ body {
     justify-self: center;
     height: 100%;
     padding-top: 100px;
-    font-size: 2rem;
-    font-weight: 700;
-}
-
-.content-title {
-    background: rgba(255, 255, 255, .25);
-    color: rgb(25, 25, 25);
-    text-align: center;
-    backdrop-filter: blur(2px);
-    border-radius: 10px;
-    padding: 10px;
-    border: 1px solid white;
 }
 
 .side-bar-container {
@@ -86,16 +116,14 @@ body {
 }
 
 
-
-
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 1000px) {
     .side-bar-container {
         display: none;
     }
 
 }
 
-@media screen and (min-width: 800px) {
+@media screen and (min-width: 1000px) {
     .top-nav .elon-logo-horizontal {
         display: none;
         width: clamp(125px, 15vw, 200px);
@@ -106,10 +134,18 @@ body {
         width: clamp(300px, 15vw, 450px);
     }
 
+    .elon-logo-max-width img {
+        width: clamp(300px, 15vw, 450px);
+    }
+
     .bottom-nav {
         content: "";
         display: block;
         background:rgb(104, 0, 0);
         height: 15px;
+    }
+
+    #search-button {
+        /* font-size: clamp(20px, 10%, 50px); */
     }
 }
