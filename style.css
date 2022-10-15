@@ -86,13 +86,14 @@ form {
     height: 25px;
     width: 150px;
     padding: clamp(5px, 2vw, 15px);
-    width: clamp(145px, 20vw, 500px);
+    width: clamp(180px, 20vw, 500px);
     border-radius: 15px;
     border: none;
     box-shadow: 0 0 0 1px var(--elon-red-darkest);
     color: rgb(208, 208, 208);
     outline: none;
 }
+
 
 input:active, input:focus {
     box-shadow: 0 0 0 1px rgba(255, 255, 255, .7);
@@ -101,7 +102,7 @@ input:active, input:focus {
 .hero-title {
     /* border: 1px solid red; */
     color: white;
-    padding: 10px 55px;
+    padding: 10px 40px;
     text-align: center;
     font-size: 5rem;
     font-weight: 600;
@@ -126,17 +127,16 @@ input:active, input:focus {
     background: rgb(242 242 242);
 }
 
+.search-input {
+    display: none;
+}
 
+.active {
+    display: block;
+}
 
 @media screen and (max-width: 1000px) {
-    .side-bar-container {
-        display: none;
-    }
-
-    .search input{ 
-        display: none;
-    }
-
+    
 }
 
 @media screen and (min-width: 1000px) {
