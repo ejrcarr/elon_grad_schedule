@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
     <title>Elon Graduation Planning</title>
 </head>
 <body>
@@ -15,27 +19,84 @@
             <a href="https://www.elon.edu/" class="elon-logo-horizontal" target="_blank"><img src="imgs/elon_logo_horizontal_white.png" alt="elon logo" id="min-width-img"></a>
             <div class="top-nav-content">
                 <div class="search">
-                    <form>
-                        <input type="search" placeholder="Search classes..." required> 
-                        <button id="search-button"><i class="fa fa-search" aria-hidden="true"></i></button>
+                    <form onsubmit="return false">
+                        <input class="search-input" id="search-bar" type="search" placeholder="Search classes..."> 
+                        <div class="clear-search" id="clear-search"><i class="fa fa-times" aria-hidden="true"></i></div>
+                        <button id="search-button" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
                     </form>
                 </div>
             </div>
         </div>
+
         <div class="bottom-nav">
 
         </div>
     </div>
     <div class="main-container">
-        <div class="content-container">
-            <div class="content-title">
-                
+        <div class="hero-title">
+            SCHEDULE
+        </div>
+    </div>
+    <div class="second-page-container">
+        <div class="add-courses" id="add-courses">ADD COURSES</div>
+        <div class="schedule-container">
+            <div class="semester-container">
+                <div class="dummy-column">YEARS</div>
+                <div class="fall">FALL</div>
+                <div class="winter">WINTER</div>
+                <div class="spring">SPRING</div>
+                <div class="summer">SUMMER</div>
             </div>
-            <div class="content">
-                
+            <div class="year">
+                <div class="year-one">YEAR ONE</div>
+                <!-- <div></div>
+                <div></div>
+                <div></div>
+                <div></div> -->
+            </div>
+            <div class="year">
+                <div class="year-two">YEAR TWO</div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+            <div class="year">
+                <div class="year-three">YEAR THREE</div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+            <div class="year">
+                <div class="year-four">YEAR FOUR</div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
             </div>
         </div>
-        
+    </div>
+    <div class="modal-container" id="modal">
+        <div class="add-courses-modal">
+            <div class="top-row">
+                <div class="temp-div"></div>
+                <div class="modal-title">Add courses</div>
+                <div class="close-modal" id="close-modal">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </div>
+            </div>
+            <div class="modal-text-area">
+                <textarea name="modal-text" id="modal-text" cols="30" rows="10"
+                placeholder="Ex.&#10;&#10;Fall 2022&#10;CSC 1300 Computer Science 1&#10;ELN 1010 Elon First-Year Course&#10;STS 1100 Statistics&#10;ENG 1100 College Writing
+                &#10;Winter 2023&#10;&#10;Spring 2023&#10;COR 1100 The Global Experience&#10;CSC 2300 Computer Science 2&#10;MTH 2410 Discrete Mathematics&#10;&#10;Summer 2023&#10;PSY 1100 Introduction to Psychology
+                &#10;OR&#10;&#10;CSC 1300,Computer Science 1,Fall 2022&#10;ELN 1010,Elon First-Year Course,Fall 2022&#10;STS 1100,Statistics,Fall 2022&#10;ENG 1100,College Writing,Fall 2022&#10;,,Winter 2023&#10;COR 1100,The Global Experience,Spring 2023&#10;CSC 2300,Computer Science 2,Spring 2023&#10;MTH 2410,Discrete Mathematics,Spring 2023&#10;PSY 1100,Introduction to Psychology,Summer 2023
+                " required></textarea>
+            </div>
+            <div class="submit-row">
+                <div class="submit-button" id="submit-button">Add</div>
+            </div>
+        </div>
     </div>
 </body>
 </html>

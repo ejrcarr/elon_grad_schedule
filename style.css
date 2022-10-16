@@ -1,4 +1,5 @@
 :root {
+    --elon-red-light: #80000a;
     --elon-red: #73000a;
     --elon-gold: rgb(211, 197, 157);
     --elon-red-darker: #69000a;
@@ -65,6 +66,18 @@ body {
     cursor: pointer;
 }
 
+.clear-search {
+    display: none;
+    position: relative;
+    left: -10px;
+    font-size: clamp(20px, 2vw, 23px);
+    color: rgb(160, 160, 160);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+}
+
 form {
     display: flex;
     align-items: center;
@@ -81,7 +94,7 @@ form {
 
 .search input {
     position: relative;
-    left: 30px;
+    left: 46px;
     background: var(--elon-red-darker);
     height: 25px;
     width: 150px;
@@ -115,16 +128,144 @@ input:active, input:focus {
 }
 
 .second-page-container {
+    display: flex;
+    flex-direction: column;
     content: "";
     background: white;
     width: 100%;
     height: 80vh;
 }
 
+.add-courses {
+    margin-top: 25px;
+    padding: 5px 10px;
+    justify-self: center;
+    align-self: center;
+    background: var(--elon-red);
+    border-radius: 20px;
+    border: 2px solid var(--elon-red-darker);
+    color: white;
+    cursor: pointer;
+    transition: background .2s ease-in-out;
+}
+
+.add-courses:hover {
+    background:rgb(160, 0, 0)
+}
+
 .schedule-container {
-    margin: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 25px;
     padding: 25px;
     background: rgb(242 242 242);
+}
+
+.semester-container, .year {
+    display: grid;
+    grid-template-columns: auto auto auto auto auto;
+}
+
+.modal-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 999;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.add-courses-modal {
+    display: flex;
+    flex-direction: column;
+    background-color: #73000a;
+    width: clamp(300px, 60vw, 800px);
+    height: 50vh;
+    max-height: 600px;
+    border-radius: 20px;
+    position: fixed;
+    z-index: 6;
+    padding: 10px 20px;
+    box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.2);
+}
+
+.top-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 5px;
+    align-items: center;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: white;
+    flex-basis: content;
+    text-align: center;
+}
+
+.modal-title {
+   text-transform: uppercase;
+   font-weight: 500;
+}
+
+.modal-text-area {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    padding-top: 30px;
+}
+
+.modal-text-area textarea {
+    background: var(--elon-red-darkest);
+    padding: 10px;
+    border: 1px solid white;
+    border-radius: 10px;
+    color: white;
+    outline: none;
+}
+
+.submit-row {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    padding: 35px;
+}
+
+.submit-button {
+    border-radius: 25px;
+    padding: 5px 20px;
+    text-transform: uppercase;
+    background: var(--elon-gold);
+    border: 2px solid var(--elon-gold-darker);
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.temp-div {
+    width: 30px;
+    height: 20px;
+}
+
+.close-modal {
+    /* justify-self: flex-end; */
+    /* position: relative; */
+    padding: 5px;
+    /* top: 10px;
+    left: -20px; */
+    cursor: pointer;
+    color: white;
+    font-size: 25px;
+}
+
+.show {
+    pointer-events: auto;
+    opacity: 1;
 }
 
 .search-input {
@@ -134,6 +275,7 @@ input:active, input:focus {
 .active {
     display: block;
 }
+
 
 @media screen and (max-width: 1000px) {
     
@@ -160,4 +302,14 @@ input:active, input:focus {
         background:rgb(104, 0, 0);
         height: 15px;
     }
+
+    #search-bar {
+        display: block;
+        /* left: 35px; */
+    }
+
+    .clear-search {
+        display: block;
+    }
+
 }
