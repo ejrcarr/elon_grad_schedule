@@ -81,24 +81,43 @@ function generateCourses(arrayOfModalText) {
     semesters.add("Spri");
     semesters.add("Summ");
 
+    const IS_COMMA_SEPARATED_INPUT = arrayOfModalText[0].includes(",");
     let semesterToCourse = new Map();
-    let currentSemester = arrayOfModalText[0];
 
-    for (let line of arrayOfModalText) {
-        let currentLine = line.substring(0,4);
-        let NEW_SEMESTER = semesters.has(currentLine);
+    if (!(IS_COMMA_SEPARATED_INPUT)) {
+        let currentSemester = arrayOfModalText[0];
 
-        if (NEW_SEMESTER) {
-            currentSemester = line;
-            if(!(line in semesterToCourse)) {
-                semesterToCourse.set(currentSemester, new Set());
+        for (let line of arrayOfModalText) {
+            let currentLine = line.substring(0,4);
+            let NEW_SEMESTER = semesters.has(currentLine);
+
+            if (NEW_SEMESTER) {
+                currentSemester = line;
+                if(!(line in semesterToCourse)) {
+                    semesterToCourse.set(currentSemester, new Set());
+                }
+            }
+            else if(line) {
+                semesterToCourse.set(currentSemester, semesterToCourse.get(currentSemester).add(line));
             }
         }
-        else if(line) {
-           semesterToCourse.set(currentSemester, semesterToCourse.get(currentSemester).add(line));
+    } else {
+        for (let line of arrayOfModalText) {
+            let courseNameYear = line.split(",");
+            semesterToCourse.set(courseNameYear[2], new Set());
+        }
+        for(let line of arrayOfModalText) {
+            let courseNameYear = line.split(",");
+            if(courseNameYear[0] || courseNameYear[1]) {
+                semesterToCourse.set(courseNameYear[2], semesterToCourse.get(courseNameYear[2]).add(courseNameYear[0] + " " + courseNameYear[1]));
+            }
         }
     }
 
+    console.log(semesterToCourse);
+
+
+    //TODO make for other dataset ex.semesterAndCourse
     for (let [key, value] of semesterToCourse) {
 
         let semesterAndCourse = key.split(" ");
@@ -113,6 +132,7 @@ function generateCourses(arrayOfModalText) {
         courseContainer.classList.add(semesterAndCourse[0].toLowerCase());
 
         for (let course of value) {
+            console.log(course +  " " + semesterAndCourse)
             let courseDiv = document.createElement("div");
             courseDiv.classList.add("course");
             courseDiv.classList.add("wide-screen");
@@ -134,6 +154,7 @@ function generateCourses(arrayOfModalText) {
             yearRow.appendChild(courseContainer);
         }
     }
+    
 
 }
 
@@ -151,35 +172,38 @@ function generateYears(arrayOfInput) {
 
     const IS_COMMA_SEPARATED_INPUT = arrayOfInput[0].includes(",");
 
+    let maxYear = -1;
+    let minYear = -1;
+
     if(IS_COMMA_SEPARATED_INPUT) {
         let currentYear = arrayOfInput[0].substring(arrayOfInput[0].length-4, arrayOfInput[0].length);
+        maxYear = parseInt(currentYear);
+        minYear = parseInt(currentYear);
+        
         const years = new Set();
         for(let element of arrayOfInput) {
-            currentYear = Math.max(parseInt(element.substring(element.length-4, element.length)), currentYear);
-            if(element.substring(element.length-9, element.length-5) === "Fall" && !years.has(currentYear)) {
+            let courseNameYear = element.split(",");
+            let semesterYear = courseNameYear[2].split(" ");
+            currentYear = parseInt(semesterYear[1]);
+            let currSemester = semesterYear[0];
+            
+            console.log(currSemester)
 
-                //TODO MAKE THIS A SEPARATE FUNCTION
-                let yearRow = document.createElement("div");
-                yearRow.classList.add("year");
-
-                let yearContainer = document.createElement("div");
-                yearRow.classList.add(currentYear);
-                yearRow.setAttribute('id', currentYear);
-
-                years.add(currentYear);
-                yearContainer.textContent = `${currentYear}-${parseInt(currentYear)+1}`;
-
-                yearRow.appendChild(yearContainer);
-                scheduleContainer.appendChild(yearRow);
-
-
+            if(["Spri", "Summ", "Wint"].includes(currSemester.substring(0,4))) {
+                currentYear--;
             }
+            else if (currSemester === "Fall") {
+                currentYear++;
+            }
+            
+            maxYear = Math.max(maxYear, currentYear);
+            minYear = Math.min(minYear, currentYear);
         }
     }
     else {
         
-        let maxYear = parseInt(arrayOfInput[0].substring(arrayOfInput[0].length-4, arrayOfInput[0].length));
-        let minYear = parseInt(arrayOfInput[0].substring(arrayOfInput[0].length-4, arrayOfInput[0].length));
+        maxYear = parseInt(arrayOfInput[0].substring(arrayOfInput[0].length-4, arrayOfInput[0].length));
+        minYear = parseInt(arrayOfInput[0].substring(arrayOfInput[0].length-4, arrayOfInput[0].length));
         for (let element of arrayOfInput) {
             if(semesters.has(element.substring(0,4))) {
                 let semesterAndCourse = element.split(" ");
@@ -190,43 +214,44 @@ function generateYears(arrayOfInput) {
                 else if (semesterAndCourse[0].substring(0,4) === "Fall") {
                     semesterAndCourse[1]++;
                 }
+
                 maxYear = Math.max(maxYear, parseInt(semesterAndCourse[1]));
                 minYear = Math.min(minYear, parseInt(semesterAndCourse[1]));
-
-                
-                // console.log('debug')
-                //TODO MAKE THIS A SEPARATE FUNCTION
-                // let yearRow = document.createElement("div");
-                // yearRow.classList.add("year");
-
-                // let yearContainer = document.createElement("div");
-                // let currentYear = element.substring(5);
-                // yearRow.classList.add(currentYear);
-                // yearRow.setAttribute('id', currentYear);
-
-                // yearContainer.textContent = `${currentYear}-${parseInt(currentYear)+1}`;
-
-                // yearRow.appendChild(yearContainer);
-                // scheduleContainer.appendChild(yearRow);
             }
         }
     
 
-        for (let i = minYear; i < maxYear; i++) {
-            console.log(i)
-            let yearRow = document.createElement("div");
-            yearRow.classList.add("year");
+        // for (let i = minYear; i < maxYear; i++) {
+        //     console.log(i)
+        //     let yearRow = document.createElement("div");
+        //     yearRow.classList.add("year");
 
-            let yearContainer = document.createElement("div");
-            yearContainer.classList.add("year-column");
-            // let currentYear = element.substring(element.length-4, element.length);
-            yearRow.classList.add(i);
-            yearRow.setAttribute('id', i);
+        //     let yearContainer = document.createElement("div");
+        //     yearContainer.classList.add("year-column");
+        //     // let currentYear = element.substring(element.length-4, element.length);
+        //     yearRow.classList.add(i);
+        //     yearRow.setAttribute('id', i);
 
-            yearContainer.textContent = `${i}-${i+1}`;
+        //     yearContainer.textContent = `${i}-${i+1}`;
 
-            yearRow.appendChild(yearContainer);
-            scheduleContainer.appendChild(yearRow);
-        }
+        //     yearRow.appendChild(yearContainer);
+        //     scheduleContainer.appendChild(yearRow);
+        // }
+    }
+    for (let i = minYear; i < maxYear; i++) {
+        console.log(i)
+        let yearRow = document.createElement("div");
+        yearRow.classList.add("year");
+
+        let yearContainer = document.createElement("div");
+        yearContainer.classList.add("year-column");
+        // let currentYear = element.substring(element.length-4, element.length);
+        yearRow.classList.add(i);
+        yearRow.setAttribute('id', i);
+
+        yearContainer.textContent = `${i}-${i+1}`;
+
+        yearRow.appendChild(yearContainer);
+        scheduleContainer.appendChild(yearRow);
     }
 }
