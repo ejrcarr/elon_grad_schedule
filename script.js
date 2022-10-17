@@ -15,22 +15,37 @@ const scheduleContainer = document.getElementById("schedule-container");
 
 
 searchIcon.addEventListener("click", () => {
+    let courses = document.getElementsByClassName("course");
     if(searchBar.className.includes('active') && searchBar.value) {
+        for (let course of courses) {
+            course.classList.remove("searched")
+            if(course.textContent.includes(searchBar.value)) {
+                course.classList.toggle("searched");
+            }
+        }
         console.log(searchBar.value);
+        
     }
     else {
         searchBar.classList.toggle("active");
         clearSearch.classList.toggle("active");
+        for (let course of courses) {
+            course.classList.remove("searched")
+        }
     }
 });
 
 clearSearch.addEventListener("click", () => {
+    let courses = document.getElementsByClassName("course");
     if(!(searchBar.value)) {
         searchBar.classList.toggle("active");
         clearSearch.classList.toggle("active");
     }
     else {
         searchBar.value = "";
+        for (let course of courses) {
+            course.classList.remove("searched")
+        }
     }
 });
 

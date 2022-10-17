@@ -1,5 +1,5 @@
 :root {
-    --elon-red-light: #80000a;
+    --elon-red-light: #a0000a;
     --elon-red: #73000a;
     --elon-gold: rgb(211, 197, 157);
     --elon-red-darker: #69000a;
@@ -215,6 +215,12 @@ input:active, input:focus {
     color: white;
     text-align: center;
     border-radius: 10px;
+}
+
+.searched {
+    background: var(--elon-gold-darker);
+    border: 2px solid rgb(131, 117, 97);
+    box-shadow: 0 0 5px 1px rgb(131, 117, 97);
 }
 
 .modal-container {
