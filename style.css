@@ -169,9 +169,18 @@ input:active, input:focus {
     cursor: pointer;
 }
 
-.dummy-button, .template-button {
+.json-button, .template-button {
     width: 50px;
     height: 30px;
+}
+
+.json-button {
+    background: var(--elon-red);
+    border: 1px solid var(--elon-red-darkest);
+    color: white;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
 }
 
 .dummy {
@@ -449,6 +458,33 @@ input:active, input:focus {
     cursor: pointer;
     color: white;
     font-size: 25px;
+}
+
+.json {
+    color: black;
+}
+
+.json-modal-shown {
+    display: flex;
+    flex-direction: column;
+    background: rgb(223, 223, 223);
+    width: clamp(300px, 60vw, 800px);
+    max-height: 600px;
+    border-radius: 20px;
+    position: fixed;
+    z-index: 6;
+    padding: 10px 20px;
+    box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.2);
+}
+
+.json-text {
+    padding-bottom: 50px;
+}
+
+.json-text textarea {
+    background: white;
+    border: 2px solid black;
+    color: black;
 }
 
 /* .searched {

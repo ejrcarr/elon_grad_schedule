@@ -42,7 +42,7 @@
         
         <div class="schedule-container" id="schedule-container">
             <div class="options-nav">
-                <div class="dummy-button"></div>
+                <button class="json-button" id="json-button">JSON</button>
                 <button class="add-courses" id="add-courses">ADD COURSES</button>
                 <div class="template-button-wrapper drop" id="template-button-wrapper">
                     <button class="template-button drop" id="template-button">
@@ -125,6 +125,22 @@
             </div>
             <div class="submit-row">
                 <button class="submit-button" id="submit-button">Add</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-container json-modal" id="json-modal">
+        <div class="json-modal-shown">
+            <div class="top-row">
+                <div class="temp-div json"></div>
+                <div class="modal-title json">JSON</div>
+                <button class="close-modal json" id="close-json-modal">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="modal-text-area json-text json">
+                <textarea name="modal-text" id="json-modal-text" cols="30" rows="10"
+                 required readonly></textarea>
             </div>
         </div>
     </div>
