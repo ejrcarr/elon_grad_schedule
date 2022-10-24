@@ -18,6 +18,10 @@ const gridLayoutButtonTop = document.getElementById("grid-layout-top");
 const scheduleContainer = document.getElementById("schedule-container");
 const gridLayoutContainer = document.getElementById("grid-layout-container");
 const rowLayoutContainer = document.getElementById("row-layout-container");
+const jsonButton = document.getElementById("json-button");
+const jsonModal = document.getElementById("json-modal");
+const closeJsonModal = document.getElementById("close-json-modal");
+const jsonModalText = document.getElementById("json-modal-text");
 const semesters = new Set(["Fall", "Wint", "Spri", "Summ"]);
 const fullNameSemesters = ["Fall", "Winter", "Spring", "Summer"];
 
@@ -25,6 +29,10 @@ let counter = 0;
 let currentHeldCourse;
 
 let isCurrentGridLayout = true;
+
+let allCourses;
+let allCourseContainers;
+let allCourseWrappers;
 
 let currentModalText;
 let arrayModalText;
@@ -41,6 +49,14 @@ addCoursesButton.addEventListener("click", toggleModalVisibility);
 closeModalButton.addEventListener("click", toggleModalVisibility);
 submitModalButton.addEventListener("click", uploadModalText);
 dropdownContent.addEventListener("click", switchLayoutAndButtons);
+
+jsonButton.addEventListener("click", () => {
+    toggleJsonModal();
+});
+closeJsonModal.addEventListener("click", () => {
+    toggleJsonModal();
+});
+
 
 function searchCourses() {
     const ACTIVE_SEARCH_BAR_HAS_VALUE = searchBar.className.includes('visible') && searchBar.value
@@ -97,6 +113,10 @@ function toggleModalVisibility() {
     modal.classList.toggle("show");
 }
 
+function toggleJsonModal() {
+    jsonModal.classList.toggle("show");
+}
+
 function uploadModalText() {
     const MODAL_TEXT_IS_NOT_EMPTY = modalTextArea.value;
     if(MODAL_TEXT_IS_NOT_EMPTY) {
@@ -107,6 +127,11 @@ function uploadModalText() {
         generateYears();
         generateCourses();
         dragAndDropFunctionality();
+        updateMapFromGrid();
+        // updateJsonTextArea();
+        updateRowsFromMap();
+        updateMapFromRow();
+        // updateJsonTextArea();
     }
 }
 
@@ -465,10 +490,9 @@ function findMinAndMaxYearsDefault() {
 }
 
 function dragAndDropFunctionality() {
-    let allCourses = document.querySelectorAll(".course");
-    // let allCourseContainers = document.querySelectorAll(".course-container, .course-wrapper");
-    let allCourseContainers = document.querySelectorAll(".course-container");
-    let allCourseWrappers = document.querySelectorAll(".course-wrapper");
+    allCourses = document.querySelectorAll(".course");
+    allCourseContainers = document.querySelectorAll(".course-container");
+    allCourseWrappers = document.querySelectorAll(".course-wrapper");
 
     let thisNodeGoesToo;
 
@@ -478,7 +502,9 @@ function dragAndDropFunctionality() {
             for(let i = 0; i < tempCourseContainer.childNodes.length; i++) {
                 if(tempCourseContainer.childNodes[i] != course) {
                     if(tempCourseContainer.childNodes[i].textContent.substring(0,8) === course.textContent.substring(0, 8)) {
-                        thisNodeGoesToo = tempCourseContainer.childNodes[i];
+                        if(tempCourseContainer.childNodes[i].textContent.length === 8) {
+                            thisNodeGoesToo = tempCourseContainer.childNodes[i];
+                        }
                     }
                 }
             }
@@ -558,9 +584,7 @@ function dragAndDropFunctionality() {
             allCourseWrappers.forEach(container => {
                 container.classList.remove("hover");
             });
-            if(thisNodeGoesToo) {
-                courseWrapper.childNodes[0].append(thisNodeGoesToo);
-            }
+
             courseWrapper.childNodes[0].append(currentHeldCourse);
             updateMapFromRow();
             updateGridFromMap();
@@ -592,7 +616,8 @@ function updateMapFromGrid() {
             }
         }
     }
-    console.log(updatedMap)
+    // console.log(updatedMap)
+    // updateJsonTextArea();
     return updatedMap;
 }
 
@@ -616,14 +641,15 @@ function updateMapFromRow() {
         }
 
         let courses = currSemesterRow.childNodes[1].childNodes[0];
-        console.log(courses);
+        // console.log(courses);
 
         for(let j = 0; j < courses.childNodes.length; j++) {
             let currCourseName = courses.childNodes[j].textContent;
             updatedMap.get(year).get(currSem).add(currCourseName);
         }
     }
-    console.log(updatedMap);
+    // console.log(updatedMap);
+    // updateJsonTextArea();
 }
 
 function updateRowsFromMap() {
@@ -642,15 +668,26 @@ function updateRowsFromMap() {
             let newCurrentCourses = document.createElement("div");
             newCurrentCourses.classList.add("courses");
 
-            console.log(setOfCourses);
+            // console.log(setOfCourses);
             for (let course of setOfCourses) {
                 let tempCourseDiv = createWideScreenCourseDiv("courses",course);
+                tempCourseDiv.addEventListener("dragstart", () => {
+                    currentHeldCourse = tempCourseDiv;
+                    tempCourseDiv.classList.add("hold");
+                    setTimeout(() => course.classList.add("invisible"), 0);
+                });
+                tempCourseDiv.addEventListener("dragend", () => {
+                    tempCourseDiv.classList.remove("hold");
+                    tempCourseDiv.classList.remove("invisible");
+                });
                 newCurrentCourses.appendChild(tempCourseDiv);
             }
             currentCourseWrapper.appendChild(newCurrentCourses);
         }
     }
-    dragAndDropFunctionality();
+
+    console.log(updatedMap)
+    // dragAndDropFunctionality();
 }
 
 function updateGridFromMap() {
@@ -675,5 +712,35 @@ function updateGridFromMap() {
             currentRowDiv.appendChild(newCurrentCourseContainer);
         }
     }
+    // allCourses = document.querySelectorAll(".course");
+    // allCourseContainers = document.querySelectorAll(".course-container");
+    // allCourseWrappers = document.querySelectorAll(".course-wrapper");
+    console.log(updatedMap)
     dragAndDropFunctionality();
+}
+
+function updateJsonTextArea() {
+    // let obj = Object.fromEntries(updatedMap);
+    // for(let [year, semestersMap] of Object.entries(obj)) {
+    //     semestersMap = Object.fromEntries(semestersMap);
+    // }
+    
+    let jsonString = JSON.stringify(mapToObject(updatedMap));
+    // console.log(jsonString)
+    jsonModalText.value = jsonString;
+}
+
+function mapToObject(map) {
+    let obj = {};
+    for (let [key, value] of map) {
+        let yearFrame = key + "-" + (parseInt(key) + 1)
+        obj[yearFrame] = {};
+        for (let [key2, value2] of value) {
+            obj[yearFrame][key2] = [];
+            for (let value of value2) {
+                obj[yearFrame][key2].push(value);
+            }
+        }
+    }
+    return obj
 }
