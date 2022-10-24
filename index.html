@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
-    <link rel="icon" href="imgs/elon-e-logo.png">
+    <link rel="icon" href="imgs/elon-e-logo-favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
@@ -19,11 +19,11 @@
             <a href="https://www.elon.edu/" class="elon-logo-max-width" target="_blank"><img src="imgs/elon-logo-max-width.jpeg" alt="elon logo"></a>
             <a href="https://www.elon.edu/" class="elon-logo-horizontal" target="_blank"><img src="imgs/elon_logo_horizontal_white.png" alt="elon logo" id="min-width-img"></a>
             <div class="top-nav-content">
-                <div class="search">
+                <div class="search-wrapper">
                     <form onsubmit="return false">
-                        <input class="search-input" id="search-bar" type="search" placeholder="Search classes..."> 
-                        <div class="clear-search" id="clear-search"><i class="fa fa-times" aria-hidden="true"></i></div>
-                        <button id="search-button" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+                        <input class="search-input search" id="search-bar" type="search" placeholder="Search classes..."> 
+                        <div class="clear-search search" id="clear-search"><i class="fa fa-times search" aria-hidden="true"></i></div>
+                        <button class="search" id="search-button" type="submit"><i class="fa fa-search search" aria-hidden="true"></i></button>
                     </form>
                 </div>
             </div>
@@ -39,31 +39,72 @@
         </div>
     </div>
     <div class="second-page-container">
-        <div class="add-courses" id="add-courses">ADD COURSES</div>
+        
         <div class="schedule-container" id="schedule-container">
-            <div class="semester-container">
-                <div class="year-column">YEAR</div>
-                <div class="fall">FALL</div>
-                <div class="winter">WINTER</div>
-                <div class="spring">SPRING</div>
-                <div class="summer">SUMMER</div>
+            <div class="options-nav">
+                <div class="dummy-button"></div>
+                <button class="add-courses" id="add-courses">ADD COURSES</button>
+                <div class="template-button-wrapper drop" id="template-button-wrapper">
+                    <button class="template-button drop" id="template-button">
+                        <div class="row-layout drop inactive" id="row-layout-top"><i class="fa fa-bars drop" aria-hidden="true"></i></div>
+                        <div class="grid-layout drop active" id="grid-layout-top"><i class="fa fa-th-large drop" id="grid-layout" aria-hidden="true"></i></div>
+                        <div class="dropdown-button drop" id="dropdown-button"><i class="fa fa-caret-down drop" aria-hidden="true"></i></div>
+                    </button>
+                    <div class="dropdown-content drop" id="dropdown-content">
+                        <div class="grid-layout drop inactive" id="grid-layout-bottom"><i class="fa fa-th-large drop" id="grid-layout" aria-hidden="true"></i></div>
+                        <div class="row-layout drop active" id="row-layout-bottom"><i class="fa fa-bars drop" aria-hidden="true"></i></div>
+                    </div>
+                </div>
             </div>
-            <div class="year">
-                <div class="year-column">YEAR ONE</div>
-                
+            <div class="grid-layout-container inactive-layout" id="grid-layout-container">
+                <div class="semester-container" id="semester-container">
+                    <div class="year-column">YEAR</div>
+                    <div class="fall">FALL</div>
+                    <div class="winter">WINTER</div>
+                    <div class="spring">SPRING</div>
+                    <div class="summer">SUMMER</div>
+                </div>
+                <div class="year">
+                    <div class="year-column">YEAR ONE</div>
+                    
+                </div>
+                <div class="year">
+                    <div class="year-column">YEARS TWO</div>
+                   
+                </div>
+                <div class="year">
+                    <div class="year-column">YEARS THREE</div>
+                    
+                </div>
+                <div class="year">
+                    <div class="year-column">YEARS FOUR</div>
+                    
+                </div>
             </div>
-            <div class="year">
-                <div class="year-column">YEARS TWO</div>
-               
+
+            <div class="row-layout-container inactive-flex" id="row-layout-container">
+                <div class="column-container semester-row" id="column-container">
+                    <div class="semester-column semester">SEMESTER</div>
+                    <div class="course-column course-wrapper">COURSES</div>
+                </div>
+                <div class="semester-row placeholder">
+                    <div class="semester-name semester">FALL</div>
+                    <div class="blank courses"></div>
+                </div>
+                <div class="semester-row placeholder">
+                    <div class="semester-name semester">WINTER</div>
+                    <div class="blank courses"></div>
+                </div>
+                <div class="semester-row placeholder">
+                    <div class="semester-name semester">SPRING</div>
+                    <div class="blank courses"></div>
+                </div>
+                <div class="semester-row placeholder">
+                    <div class="semester-name semester">SUMMER</div>
+                    <div class="blank courses"></div>
+                </div>
             </div>
-            <div class="year">
-                <div class="year-column">YEARS THREE</div>
-                
-            </div>
-            <div class="year">
-                <div class="year-column">YEARS FOUR</div>
-                
-            </div>
+            
         </div>
     </div>
     <div class="modal-container" id="modal">
@@ -71,9 +112,9 @@
             <div class="top-row">
                 <div class="temp-div"></div>
                 <div class="modal-title">Add courses</div>
-                <div class="close-modal" id="close-modal">
+                <button class="close-modal" id="close-modal">
                     <i class="fa fa-times" aria-hidden="true"></i>
-                </div>
+                </button>
             </div>
             <div class="modal-text-area">
                 <textarea name="modal-text" id="modal-text" cols="30" rows="10"
@@ -83,7 +124,7 @@
                 " required></textarea>
             </div>
             <div class="submit-row">
-                <div class="submit-button" id="submit-button">Add</div>
+                <button class="submit-button" id="submit-button">Add</button>
             </div>
         </div>
     </div>
