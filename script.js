@@ -52,6 +52,7 @@ dropdownContent.addEventListener("click", switchLayoutAndButtons);
 
 jsonButton.addEventListener("click", () => {
     toggleJsonModal();
+    updateJsonTextArea();
 });
 closeJsonModal.addEventListener("click", () => {
     toggleJsonModal();
@@ -712,21 +713,13 @@ function updateGridFromMap() {
             currentRowDiv.appendChild(newCurrentCourseContainer);
         }
     }
-    // allCourses = document.querySelectorAll(".course");
-    // allCourseContainers = document.querySelectorAll(".course-container");
-    // allCourseWrappers = document.querySelectorAll(".course-wrapper");
     console.log(updatedMap)
     dragAndDropFunctionality();
 }
 
 function updateJsonTextArea() {
-    // let obj = Object.fromEntries(updatedMap);
-    // for(let [year, semestersMap] of Object.entries(obj)) {
-    //     semestersMap = Object.fromEntries(semestersMap);
-    // }
-    
+ 
     let jsonString = JSON.stringify(mapToObject(updatedMap));
-    // console.log(jsonString)
     jsonModalText.value = jsonString;
 }
 
