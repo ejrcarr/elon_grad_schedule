@@ -263,8 +263,6 @@ function generateGridLayoutFromMap(semesterToCourseMap) {
         }
 
         if(yearRow) {
-
-            // yearRow.querySelector(".dummy").remove();
             yearRow.querySelector("." + semesterName.toLowerCase()).remove();
             yearRow.appendChild(courseContainer);
         }
@@ -328,11 +326,9 @@ function generateRowLayoutFromMap(semesterToCourseMap) {
         }});
        
 
-    console.log(sortedArray)
     let currentSeenSemesters = [...sortedArray];
     for(let i = 0; i < sortedArray.length; i++) {
         let semester = sortedArray[i];
-        // console.log(semester);
         let splittedSemester = semester.split(" ");
         let stringSemesterYear = splittedSemester[1];
 
@@ -470,13 +466,15 @@ function findMinAndMaxYearsDefault() {
 
 function dragAndDropFunctionality() {
     let allCourses = document.querySelectorAll(".course");
+    // let allCourseContainers = document.querySelectorAll(".course-container, .course-wrapper");
     let allCourseContainers = document.querySelectorAll(".course-container");
+    let allCourseWrappers = document.querySelectorAll(".course-wrapper");
+
     let thisNodeGoesToo;
 
     allCourses.forEach(course => {
         course.addEventListener("dragstart", () => {
             let tempCourseContainer = course.parentNode;
-            console.log(tempCourseContainer)
             for(let i = 0; i < tempCourseContainer.childNodes.length; i++) {
                 if(tempCourseContainer.childNodes[i] != course) {
                     if(tempCourseContainer.childNodes[i].textContent.substring(0,8) === course.textContent.substring(0, 8)) {
@@ -518,6 +516,7 @@ function dragAndDropFunctionality() {
 
         courseContainer.addEventListener("drop", e => {
             e.preventDefault();
+            
             allCourseContainers.forEach(container => {
                 container.classList.remove("hover");
             });
@@ -529,6 +528,45 @@ function dragAndDropFunctionality() {
             updateRowsFromMap();
         });
     });
+
+    allCourseWrappers.forEach(courseWrapper => {
+        courseWrapper.addEventListener("dragenter", e => {
+            e.preventDefault();
+            allCourseWrappers.forEach(container => {
+                container.classList.remove("hover");
+            });
+            counter++;
+            if(!courseWrapper.className.includes("course-column")) {
+                courseWrapper.classList.add("hover");
+            }
+
+        });
+        courseWrapper.addEventListener("dragleave", () => {
+            counter--;
+            if(counter === 0) {
+                courseWrapper.classList.remove("hover");
+            }
+        });
+
+        courseWrapper.addEventListener("dragover", e => {
+            e.preventDefault();
+        })
+
+        courseWrapper.addEventListener("drop", e => {
+            e.preventDefault();
+            
+            allCourseWrappers.forEach(container => {
+                container.classList.remove("hover");
+            });
+            if(thisNodeGoesToo) {
+                courseWrapper.childNodes[0].append(thisNodeGoesToo);
+            }
+            courseWrapper.childNodes[0].append(currentHeldCourse);
+            updateMapFromRow();
+            updateGridFromMap();
+        });
+    });
+
 }
 
 function updateMapFromGrid() {
@@ -560,7 +598,32 @@ function updateMapFromGrid() {
 
 function updateMapFromRow() {
     updatedMap = new Map();
+    let semesterRowDivs = document.querySelectorAll(".semester-row");
+    for(let i = 1; i < semesterRowDivs.length; i++) {
+        let currSemesterRow = semesterRowDivs[i];
+        let semAndYear = currSemesterRow.className.split(" ")[1];
+        let currSem = semAndYear.split("-")[0];
+        let year = currSemesterRow.className.substring(currSemesterRow.className.length-4, currSemesterRow.className.length);
+        if(currSem != "fall") {
+            year--;
+            year = year.toString();
+        }
+        if(!updatedMap.has(year)) {
+            updatedMap.set(year, new Map());
+        }
+        if(!updatedMap.get(year).has(currSem)) {
+            updatedMap.get(year).set(currSem, new Set());
+        }
 
+        let courses = currSemesterRow.childNodes[1].childNodes[0];
+        console.log(courses);
+
+        for(let j = 0; j < courses.childNodes.length; j++) {
+            let currCourseName = courses.childNodes[j].textContent;
+            updatedMap.get(year).get(currSem).add(currCourseName);
+        }
+    }
+    console.log(updatedMap);
 }
 
 function updateRowsFromMap() {
@@ -570,18 +633,47 @@ function updateRowsFromMap() {
             if(semester != "fall") {
                 tempYear++;
             }
-            console.log(semester + " " + tempYear)
             let currentRow = document.querySelector("." + semester + "-" + tempYear);
         
-            console.log(currentRow.childNodes[1])
             let currentCourseWrapper = currentRow.childNodes[1];
             let currentCourses = currentCourseWrapper.childNodes[0];
-            currentCourses.childNodes.forEach(child => child.remove());
+         
+            currentCourses.remove();
+            let newCurrentCourses = document.createElement("div");
+            newCurrentCourses.classList.add("courses");
+
+            console.log(setOfCourses);
+            for (let course of setOfCourses) {
+                let tempCourseDiv = createWideScreenCourseDiv("courses",course);
+                newCurrentCourses.appendChild(tempCourseDiv);
+            }
+            currentCourseWrapper.appendChild(newCurrentCourses);
+        }
+    }
+    dragAndDropFunctionality();
+}
+
+function updateGridFromMap() {
+    for(let [year, semesterToCourseMap] of updatedMap) {
+        for (let [semester, setOfCourses] of semesterToCourseMap) {
+            let tempYear = year;
+            let currentRowDiv = document.getElementById(tempYear.toString());
+            let currentCourseContainer = currentRowDiv.querySelector("." + semester);
+            currentCourseContainer.remove();
+
+            let newCurrentCourseContainer = document.createElement("div");
+            newCurrentCourseContainer.classList.add("course-container");
+            newCurrentCourseContainer.classList.add(semester);
 
             for (let course of setOfCourses) {
                 let tempCourseDiv = createWideScreenCourseDiv("courses",course);
-                currentCourses.appendChild(tempCourseDiv);
+                let tempMobileCourseDiv = createMobileCourseDiv("courses", course.substring(0, 8));
+
+                newCurrentCourseContainer.appendChild(tempCourseDiv);
+                newCurrentCourseContainer.appendChild(tempMobileCourseDiv);
             }
+            currentRowDiv.appendChild(newCurrentCourseContainer);
         }
     }
+    dragAndDropFunctionality();
 }
