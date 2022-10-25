@@ -22,7 +22,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-image: url('../imgs/alamance.jpeg');
+    background-image: url('./imgs/alamance.jpeg');
     width: 100vw;
     height: 40vh;
     background-size: cover;
