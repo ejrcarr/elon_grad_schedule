@@ -296,6 +296,13 @@ function generateGridLayoutFromMap(semesterToCourseMap) {
 }
 
 function generateRowLayoutFromMap(semesterToCourseMap) {
+    let allSemesterRows = document.querySelectorAll(".semester-row");
+    allSemesterRows.forEach(row => {
+        if(!row.className.includes("column-container")) {
+            row.remove();
+        }
+});
+
     let listOfYears = [];
     for (const [key, value] of semesterToCourseMap) {
         let stringYear = key.substring(key.length-4, key.length);
@@ -351,12 +358,8 @@ function generateRowLayoutFromMap(semesterToCourseMap) {
             return parseInt(splitA[1]) - parseInt(splitB[1]);
         }});
        
-
-    let currentSeenSemesters = [...sortedArray];
     for(let i = 0; i < sortedArray.length; i++) {
         let semester = sortedArray[i];
-        let splittedSemester = semester.split(" ");
-        let stringSemesterYear = splittedSemester[1];
 
         let courses = semesterToCourseMap.get(semester);
         
@@ -489,7 +492,6 @@ function findMinAndMaxYearsDefault() {
 
     return [minYear, maxYear]
 }
-
 function dragAndDropFunctionality() {
     allCourses = document.querySelectorAll(".course");
     allCourseContainers = document.querySelectorAll(".course-container");
@@ -499,14 +501,17 @@ function dragAndDropFunctionality() {
 
     allCourses.forEach(course => {
         course.addEventListener("dragstart", () => {
+
             let tempCourseContainer = course.parentNode;
             for(let i = 0; i < tempCourseContainer.childNodes.length; i++) {
                 if(tempCourseContainer.childNodes[i] != course) {
                     if(tempCourseContainer.childNodes[i].textContent.substring(0,8) === course.textContent.substring(0, 8)) {
-                        if(tempCourseContainer.childNodes[i].textContent.length === 8) {
+                        if(course.className.includes("mobile") && tempCourseContainer.childNodes[i].textContent.length > 8) {
                             thisNodeGoesToo = tempCourseContainer.childNodes[i];
                         }
-                    }
+                        else if (course.className.includes("wide-screen") && tempCourseContainer.childNodes[i].textContent.length === 8)
+                            thisNodeGoesToo = tempCourseContainer.childNodes[i];
+                        }
                 }
             }
 
@@ -610,15 +615,13 @@ function updateMapFromGrid() {
             updatedMap.get(year).set(tempSemester, new Set());
             for(let k = 0; k < currCourseContainer.childNodes.length; k++) {
                 let currCourseName = currCourseContainer.childNodes[k].textContent;
-                if(currCourseName.length > 8) {
+                if(!currCourseContainer.childNodes[k].className.includes("mobile")) {
                     updatedMap.get(year).get(tempSemester).add(currCourseName);
                 }
                 
             }
         }
     }
-    // console.log(updatedMap)
-    // updateJsonTextArea();
     return updatedMap;
 }
 
@@ -642,15 +645,12 @@ function updateMapFromRow() {
         }
 
         let courses = currSemesterRow.childNodes[1].childNodes[0];
-        // console.log(courses);
 
         for(let j = 0; j < courses.childNodes.length; j++) {
             let currCourseName = courses.childNodes[j].textContent;
             updatedMap.get(year).get(currSem).add(currCourseName);
         }
     }
-    // console.log(updatedMap);
-    // updateJsonTextArea();
 }
 
 function updateRowsFromMap() {
@@ -669,13 +669,12 @@ function updateRowsFromMap() {
             let newCurrentCourses = document.createElement("div");
             newCurrentCourses.classList.add("courses");
 
-            // console.log(setOfCourses);
             for (let course of setOfCourses) {
                 let tempCourseDiv = createWideScreenCourseDiv("courses",course);
                 tempCourseDiv.addEventListener("dragstart", () => {
                     currentHeldCourse = tempCourseDiv;
                     tempCourseDiv.classList.add("hold");
-                    setTimeout(() => course.classList.add("invisible"), 0);
+                    setTimeout(() => tempCourseDiv.classList.add("invisible"), 0);
                 });
                 tempCourseDiv.addEventListener("dragend", () => {
                     tempCourseDiv.classList.remove("hold");
@@ -688,7 +687,6 @@ function updateRowsFromMap() {
     }
 
     console.log(updatedMap)
-    // dragAndDropFunctionality();
 }
 
 function updateGridFromMap() {
@@ -703,23 +701,111 @@ function updateGridFromMap() {
             newCurrentCourseContainer.classList.add("course-container");
             newCurrentCourseContainer.classList.add(semester);
 
+            
+
             for (let course of setOfCourses) {
                 let tempCourseDiv = createWideScreenCourseDiv("courses",course);
                 let tempMobileCourseDiv = createMobileCourseDiv("courses", course.substring(0, 8));
 
+                tempCourseDiv.addEventListener("dragstart", () => {
+
+                    let tempCourseContainer = tempCourseDiv.parentNode;
+                    for(let i = 0; i < tempCourseContainer.childNodes.length; i++) {
+                        if(tempCourseContainer.childNodes[i] != tempCourseDiv) {
+                            if(tempCourseContainer.childNodes[i].textContent.substring(0,8) === tempCourseDiv.textContent.substring(0, 8)) {
+                                if(tempCourseDiv.className.includes("mobile") && tempCourseContainer.childNodes[i].textContent.length > 8) {
+                                    thisNodeGoesToo = tempCourseContainer.childNodes[i];
+                                }
+                                else if (tempCourseDiv.className.includes("wide-screen") && tempCourseContainer.childNodes[i].textContent.length === 8)
+                                    thisNodeGoesToo = tempCourseContainer.childNodes[i];
+                                }
+                        }
+                    }
+        
+                    currentHeldCourse = tempCourseDiv;
+                    tempCourseDiv.classList.add("hold");
+                    setTimeout(() => tempCourseDiv.classList.add("invisible"), 0);
+                });
+                tempCourseDiv.addEventListener("dragend", () => {
+                    tempCourseDiv.classList.remove("hold");
+                    tempCourseDiv.classList.remove("invisible");
+                });
+
+                tempMobileCourseDiv.addEventListener("dragstart", () => {
+
+                    let tempCourseContainer = tempMobileCourseDiv.parentNode;
+                    for(let i = 0; i < tempCourseContainer.childNodes.length; i++) {
+                        if(tempCourseContainer.childNodes[i] != tempMobileCourseDiv) {
+                            if(tempCourseContainer.childNodes[i].textContent.substring(0,8) === tempMobileCourseDiv.textContent.substring(0, 8)) {
+                                if(tempMobileCourseDiv.className.includes("mobile") && tempCourseContainer.childNodes[i].textContent.length > 8) {
+                                    thisNodeGoesToo = tempCourseContainer.childNodes[i];
+                                }
+                                else if (tempMobileCourseDiv.className.includes("wide-screen") && tempCourseContainer.childNodes[i].textContent.length === 8)
+                                    thisNodeGoesToo = tempCourseContainer.childNodes[i];
+                                }
+                        }
+                    }
+        
+                    currentHeldCourse = tempMobileCourseDiv;
+                    tempMobileCourseDiv.classList.add("hold");
+                    setTimeout(() => tempMobileCourseDiv.classList.add("invisible"), 0);
+                });
+                tempMobileCourseDiv.addEventListener("dragend", () => {
+                    tempMobileCourseDiv.classList.remove("hold");
+                    tempMobileCourseDiv.classList.remove("invisible");
+                });
+            
+
                 newCurrentCourseContainer.appendChild(tempCourseDiv);
                 newCurrentCourseContainer.appendChild(tempMobileCourseDiv);
             }
+
+            counter = 0
+            newCurrentCourseContainer.addEventListener("dragenter", e => {
+                e.preventDefault();
+                allCourseContainers.forEach(container => {
+                    container.classList.remove("hover");
+                });
+                counter++;
+                newCurrentCourseContainer.classList.add("hover");
+    
+            });
+            newCurrentCourseContainer.addEventListener("dragleave", () => {
+                counter--;
+                if(counter === 0) {
+                    newCurrentCourseContainer.classList.remove("hover");
+                }
+            });
+    
+            newCurrentCourseContainer.addEventListener("dragover", e => {
+                e.preventDefault();
+            })
+    
+            newCurrentCourseContainer.addEventListener("drop", e => {
+                e.preventDefault();
+                
+                allCourseContainers = document.querySelectorAll(".course-container");
+                allCourseContainers.forEach(container => {
+                    container.classList.remove("hover");
+                });
+                if(thisNodeGoesToo) {
+                    newCurrentCourseContainer.append(thisNodeGoesToo);
+                }
+                newCurrentCourseContainer.append(currentHeldCourse);
+                updateMapFromGrid();
+                updateRowsFromMap();
+            });
+      
             currentRowDiv.appendChild(newCurrentCourseContainer);
         }
+
     }
-    console.log(updatedMap)
-    dragAndDropFunctionality();
 }
 
 function updateJsonTextArea() {
  
-    let jsonString = JSON.stringify(mapToObject(updatedMap));
+    let jsonString = JSON.stringify(mapToObject(updatedMap), null, 2);
+    
     jsonModalText.value = jsonString;
 }
 
